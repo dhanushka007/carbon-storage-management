@@ -143,11 +143,11 @@ public class PostgresUserDefinedRSSManager extends UserDefinedRSSManager {
 			conn = getConnection(rssInstance.getName());
 			String removeDBQuery = "DROP DATABASE \"" + databaseName + "\"";
 			String detachUserQuery = "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE " +
-			                         "pg_stat_activity.datname = \"" + databaseName + "\" AND pid <> pg_backend_pid()";
+			                         "pg_stat_activity.datname = '" + databaseName + "' AND pid <> pg_backend_pid()";
 			nativeRemoveDBStatement = conn.prepareStatement(removeDBQuery);
 			nativeDetachUserStatement = conn.prepareStatement(detachUserQuery);
 			super.removeDatabase(txConn, rssInstance.getName(), databaseName, rssInstance,
-			                     RSSManagerConstants.RSSManagerTypes.RM_TYPE_SYSTEM);
+			                     RSSManagerConstants.RSSManagerTypes.RM_TYPE_USER_DEFINED);
 			nativeDetachUserStatement.execute();
 			nativeRemoveDBStatement.execute();
 			RSSManagerUtil.commitTx(txConn);
@@ -252,7 +252,7 @@ public class PostgresUserDefinedRSSManager extends UserDefinedRSSManager {
 			revokeAllPrivileges(conn, databaseName, user.getName());
 			composePreparedStatement(databaseConn, databaseName, user.getName(), postgresPrivs);
 			super.updateDatabaseUserPrivileges(null, rssInstanceName, databaseName, privileges, user.getUsername(),
-			                                   RSSManagerConstants.RSSManagerTypes.RM_TYPE_SYSTEM);
+			                                   RSSManagerConstants.RSSManagerTypes.RM_TYPE_USER_DEFINED);
 		} catch (Exception e) {
 			String msg = "Error occurred while updating database user privileges: " + e.getMessage();
 			handleException(msg, e);

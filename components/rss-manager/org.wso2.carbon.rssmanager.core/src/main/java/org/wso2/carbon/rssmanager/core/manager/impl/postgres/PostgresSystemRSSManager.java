@@ -145,7 +145,7 @@ public class PostgresSystemRSSManager extends SystemRSSManager {
             conn.setAutoCommit(true);
             String removeDBQuery = "DROP DATABASE \"" + databaseName + "\"";
             String detachUserQuery = "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE " +
-                                     "pg_stat_activity.datname = \"" + databaseName + "\" AND pid <> pg_backend_pid()";
+                                     "pg_stat_activity.datname = '" + databaseName + "' AND pid <> pg_backend_pid()";
             nativeRemoveDBStatement = conn.prepareStatement(removeDBQuery);
             nativeDetachUserStatement = conn.prepareStatement(detachUserQuery);
             super.removeDatabase(txConn, rssInstance.getName(), databaseName, rssInstance,
